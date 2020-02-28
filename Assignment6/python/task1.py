@@ -4,7 +4,7 @@ from test_normalize_points import *
 
 matches = np.loadtxt('../data/matches.txt')
 pts = matches[:,:2]
-
+print(pts)
 print('Checking that the points satisfy the normalization criteria...')
 pts_n,T = normalize_points(pts)
 test_normalize_points(pts_n)
