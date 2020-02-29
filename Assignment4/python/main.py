@@ -12,11 +12,11 @@ roll  = 0*np.pi/180;
 
 # Task 1
 method = gauss_newton
-last_image = 352
+last_image = 86
 
 # Task 2
 method = levenberg_marquardt
-last_image = 352
+last_image = 356
 trajectory = []
 for image_number in range(last_image + 1):
     markers = all_markers[image_number,:]

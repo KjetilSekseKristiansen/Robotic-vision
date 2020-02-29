@@ -1,6 +1,6 @@
 import numpy as np
 import sympy as sp
-
+from math import pi
 K                  = np.loadtxt('../data/cameraK.txt')
 p_model            = np.loadtxt('../data/model.txt')
 platform_to_camera = np.loadtxt('../data/pose.txt')
@@ -52,21 +52,18 @@ def gauss_newton(uv, weights, yaw, pitch, roll):
     #
     # Task 1c: Implement the Gauss-Newton method
     #
-    JTJ, JTr = normal_equations(uv, weights, yaw, pitch, roll)
-    if(np.linalg.det(JTJ)== 0):
-        delta = np.transpose(np.linalg.solve(np.trace(JTJ)*np.identity(3), -JTr))
-    else:
-        delta = np.transpose(np.linalg.solve(JTJ , -JTr))
-    max_iter = 8
+    max_iter = 28
     alpha = 0.25
 
     #initial guess
     theta = np.transpose(np.array([yaw,pitch,roll]))
     for iter in range(max_iter):
+        JTJ, JTr = normal_equations(uv, weights, yaw, pitch, roll)
+        delta = np.linalg.solve(JTJ,-JTr)
         theta =  np.add(theta, alpha*delta)
-    yaw = theta[0]
-    pitch = theta[1]
-    roll = theta[2]
+        yaw = theta[0]
+        pitch = theta[1]
+        roll = theta[2]
     return yaw, pitch, roll
 
 def levenberg_marquardt(uv, weights, yaw, pitch, roll):
@@ -75,17 +72,15 @@ def levenberg_marquardt(uv, weights, yaw, pitch, roll):
     JTJ, JTr = normal_equations(uv, weights, yaw, pitch, roll)
     D = np.identity(3)
     la = 1e-3*np.trace(JTJ)/len(JTJ)
-    print(JTJ)
     theta = np.transpose(np.array([yaw, pitch, roll]))
     res_old = residuals(uv, weights, theta[0], theta[1], theta[2])
-    max_iter = 100
+    max_iter = 2
     i = 0
     while i < max_iter:
+        JTJ, JTr = normal_equations(uv, weights, yaw, pitch, roll)
         delta = np.linalg.solve(JTJ + la*D,-JTr)
-        print(la)
         theta_new = theta + delta
         res_new = residuals(uv,weights,theta_new[0],theta_new[1],theta_new[2])
-        print(res_new)
         if np.linalg.norm(res_old) > np.linalg.norm(res_new):
             theta = theta+delta
             la = la/10
@@ -94,14 +89,13 @@ def levenberg_marquardt(uv, weights, yaw, pitch, roll):
         else:
             la = la*10
         if la > 10e40:
-            i+= 1
+            i += 1
             res_old = res_new
             theta = theta + delta
             la = la / 10
-    yaw = theta[0]
-    pitch = theta[1]
-    roll = theta[2]
-
+        yaw = theta[0]
+        pitch = theta[1]
+        roll = theta[2]
     return yaw, pitch, roll
 
 def rotate_x(radians):

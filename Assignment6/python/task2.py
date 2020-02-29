@@ -17,4 +17,6 @@ F = eight_point(uv1, uv2)
 # np.random.seed(1) # Uncomment if you don't want randomized points
 
 show_point_matches(I1, I2, uv1, uv2, F)
+plt.show()
 plt.savefig('out2.png')
+
