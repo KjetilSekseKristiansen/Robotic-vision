@@ -29,8 +29,6 @@ def normalize_points(pts):
         u_dist += abs(pts[i,0]-cent_u)
         v_dist += abs(pts[i,1]-cent_v)
         tot_dist += np.sqrt((pts[i,0]-cent_u) ** 2 + (pts[i,1]-cent_v) ** 2)
-    u_dist = u_dist/len(pts)
-    v_dist = v_dist/len(pts)
     tot_dist = tot_dist/len(pts)
     T = np.array([[np.sqrt(2)/tot_dist, 0, -cent_u*np.sqrt(2)/tot_dist],[0 , np.sqrt(2)/tot_dist, -cent_v*np.sqrt(2)/tot_dist],
     [0, 0, 1]])

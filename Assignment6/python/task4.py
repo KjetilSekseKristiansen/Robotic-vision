@@ -13,9 +13,10 @@ I1 = plt.imread('../data/im1.png')
 I2 = plt.imread('../data/im2.png')
 K1 = np.loadtxt('../data/K1.txt')
 K2 = np.loadtxt('../data/K2.txt')
-
 F = eight_point(uv1, uv2)
 
+#plt.imshow(I2[250:400,180:220])
+#plt.show()
 # np.random.seed(1) # Uncomment if you don't want randomized points
 
 # Choose k random points to visualize
@@ -25,7 +26,7 @@ sample = np.random.choice(range(n), size=k, replace=False)
 uv1 = uv1[sample,:]
 uv2 = uv2[sample,:]
 uv2_match = epipolar_match(rgb2gray(I1), rgb2gray(I2), F, uv1)
-
+show_point_matches(I1, I2, uv1, uv2_match, F)
 # Draw points in image 1 and matching point in image 2 (true vs epipolar match)
 plt.figure(figsize=(6,4))
 colors = plt.cm.get_cmap('Set1', k).colors
@@ -39,3 +40,4 @@ plt.scatter(uv2[:,0], uv2[:,1], s=100, marker='o', facecolor='none', edgecolors=
 plt.legend()
 plt.tight_layout()
 plt.savefig('out4.png')
+plt.show()
